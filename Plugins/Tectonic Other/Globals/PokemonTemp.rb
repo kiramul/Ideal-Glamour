@@ -25,6 +25,8 @@ class PokemonTemp
     attr_accessor :cueBGM
     attr_accessor :cueFrames
 
+    attr_accessor :lastTile
+
     # GameData caches
     attr_accessor :townMapData
     attr_accessor :phoneData
@@ -46,6 +48,7 @@ class PokemonTemp
       @begunNewGame           = false
       @miniupdate             = false
       @forceSingleBattle      = false
+      @lastTile               = nil
     end
 
     def dependentEvents

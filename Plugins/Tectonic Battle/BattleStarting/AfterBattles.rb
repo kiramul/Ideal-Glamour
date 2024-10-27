@@ -36,7 +36,22 @@ def pbAfterBattle(decision,canLose)
       if !canLose
         $game_system.bgm_unpause
         $game_system.bgs_unpause
-        pbStartOver
+
+        echoln("Player's last tile: #{$PokemonTemp.lastTile}")
+
+        if aidKitHasCharges? && $PokemonTemp.lastTile
+            pbMessage(_INTL("\\w[]\\wm\\c[12]\\l[3]You quickly pull some medicine from your Aid Kit.\\wtnp[20]"))
+            useAidKit
+            lastTile = $PokemonTemp.lastTile
+            transferPlayer(lastTile[1],lastTile[2],lastTile[3],lastTile[0])
+
+            # Reset all events to original positions
+            for event in $game_map.events.values
+                event.move_to_original
+            end
+        else
+            pbStartOver
+        end
       end
     end
   }
@@ -53,4 +68,20 @@ def pbAfterBattle(decision,canLose)
       evo.pbEvolution
       evo.pbEndScreen
     end
-  end
+end
+
+Events.onMapChange += proc { |_sender, _e|
+    $PokemonTemp.lastTile = nil
+}
+
+Events.onLeaveTile += proc { |_sender,e|
+    # e[0] - Event that just left the tile.
+    # e[1] - Map ID where the tile is located (not necessarily
+    #        the current map). Use "$MapFactory.getMap(e[1])" to
+    #        get the Game_Map object corresponding to that map.
+    # e[2] - X-coordinate of the tile
+    # e[3] - Y-coordinate of the tile
+    next unless e[0] == $game_player
+    $PokemonTemp.lastTile = [e[1],e[2],e[3],$game_player.direction]
+    echoln("Player's last tile set to: #{$PokemonTemp.lastTile}")
+}

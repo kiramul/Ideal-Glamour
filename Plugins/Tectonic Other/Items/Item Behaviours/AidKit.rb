@@ -72,6 +72,11 @@ def useAidKit()
 	end
 end
 
+def aidKitHasCharges?
+    return false if $PokemonGlobal.teamHealerCurrentUses.nil?
+    return $PokemonGlobal.teamHealerCurrentUses > 0
+end
+
 ItemHandlers::UseFromBag.add(:AIDKIT,proc { |item|
 	next useAidKit()
 })
