@@ -1,3 +1,0 @@
-Name         = Tectonic Content Scripts
-Credits      = Zeu
-Requires	 = Tectonic Battle
